@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../models/user.dart';
 import '../utils/database_helper.dart';
 
@@ -16,7 +18,7 @@ class UserDetailsEdit extends StatefulWidget {
 
 class UserDetailsEditState extends State<UserDetailsEdit> {
   DatabaseHelper helper = DatabaseHelper();
-
+  final ImagePicker _picker = ImagePicker();
   String appBarTitle;
   User user;
 
@@ -25,16 +27,21 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
   TextEditingController ageController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  String? _imagePath;
 
   UserDetailsEditState(this.user, this.appBarTitle);
-
+@override
+  void initState() {
+  nameController.text = user.name!;
+  qualificationController.text = user.qualification!;
+  ageController.text = user.age.toString();
+  phoneController.text = user.phone.toString();
+  descriptionController.text = user.description!;
+  _imagePath = user.imagePath;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    nameController.text = user.name.toString();
-    qualificationController.text = user.qualification.toString();
-    ageController.text = user.age.toString();
-    phoneController.text = user.phoneNumber.toString();
-    descriptionController.text = user.description.toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -49,8 +56,39 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
       ),
       body: Padding(
         padding: EdgeInsets.all(10.0),
-        child: ListView(
+        child: ListView(physics: ScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
           children: <Widget>[
+            InkWell(
+              child: CircleAvatar(
+                backgroundColor: Colors.yellow,
+                radius: 50,
+             child: _imagePath != null
+                 ? Container(width: 100,height: 100,
+                   child: ClipRRect(
+               borderRadius: BorderRadius.circular(50),
+                     clipBehavior: Clip.antiAliasWithSaveLayer,
+                     child: Image.file(File(_imagePath!,),fit: BoxFit.cover,)),
+                 )
+                 : Container(child: Icon(Icons.camera_alt_outlined),
+             ),
+
+        ),
+
+
+              onTap: ()async {
+                final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  setState(() {
+                    _imagePath = pickedFile.path;
+                    print(_imagePath);
+                  });
+                }else{
+                  print("error/////////////////////////////");
+                }
+              },
+            ),
             Padding(
               padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
               child: TextField(
@@ -138,29 +176,23 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
                 ),
               ),
             ),
+
             Padding(
               padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepOrangeAccent,
-                  textStyle: TextStyle(fontSize: 18.0),
+                child: Text(
+                  appBarTitle == 'Save student' ? 'Update User' : 'Save student',
+                  style: TextStyle(fontSize: 18.0),
                 ),
                 onPressed: () {
-                  setState(() {
-                    _save();
-                  });
+                  _save();
                 },
-                child: Text('Save'),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void moveToLastScreen() {
-    Navigator.pop(context, true);
   }
 
   void updateName() {
@@ -176,7 +208,7 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
   }
 
   void updatePhone() {
-    user.phoneNumber = int.parse(phoneController.text);
+    user.phone = int.parse(phoneController.text);
   }
 
   void updateDescription() {
@@ -185,29 +217,16 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
 
   void _save() async {
     moveToLastScreen();
-
-    int result;
-    if (user.id != null) {
-      result = await helper.updateUser(user);
+    user.imagePath = _imagePath;
+    print(user.imagePath);
+    if (appBarTitle == 'Save student') {
+      await helper.insertUser(user);
     } else {
-      result = await helper.insertUser(user);
-    }
-
-    if (result != 0) {
-      _showAlertDialog('Status', 'User Saved Successfully');
-    } else {
-      _showAlertDialog('Status', 'Problem Saving User');
+      await helper.updateUser(user);
     }
   }
 
-  void _showAlertDialog(String title, String message) {
-    AlertDialog alertDialog = AlertDialog(
-      title: Text(title),
-      content: Text(message),
-    );
-    showDialog(
-      context: context,
-      builder: (_) => alertDialog,
-    );
+  void moveToLastScreen() {
+    Navigator.pop(context, true);
   }
 }

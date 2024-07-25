@@ -52,7 +52,7 @@ class UserDetails extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(
-              user.phoneNumber.toString(),
+              user.phone.toString(),
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 16),

@@ -1,22 +1,41 @@
+import 'package:flutter/material.dart';
+
 class User {
   int? id;
-  String? name;
+  String?name;
   String? qualification;
-  int? phoneNumber;
-  int?age;
+  int? age;
+  int? phone;
   String? description;
+  String? imagePath;
 
-  User(this.name,this.qualification,this.phoneNumber,this.age, this.description,);
+  User(
+      this.name,
+      this.qualification,
+      this.age,
+      this.phone,
+      this.description, [
+        this.imagePath,
+      ]);
 
-  User.withId(this.id,this.name,this.qualification,this.phoneNumber,this.age, this.description,);
+  User.withId(
+      this.id,
+      this.name,
+      this.qualification,
+      this.age,
+      this.phone,
+      this.description, [
+        this.imagePath,
+      ]);
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'name': name,
-      'qualification':qualification,
-     "phone": phoneNumber,
-    "age":  age,
+      'qualification': qualification,
+      'age': age,
+      'phone': phone,
       'description': description,
+      'imagePath': imagePath,
     };
     if (id != null) {
       map['id'] = id;
@@ -24,12 +43,13 @@ class User {
     return map;
   }
 
-  User.fromMapObject(Map<String, dynamic>map) {
-    id = map['id'];
-    name = map['name'];
-    qualification=map['qualification'];
-   phoneNumber=map ["phone"];
-    age=map["age"];
-    description = map['description'];
+  User.fromMapObject(Map<String, dynamic> map) {
+    id = map['id']?? "";
+    name = map['name']?? "";
+    qualification = map['qualification']?? "";
+    age = map['age']?? "";
+    phone = map['phone']?? "";
+    description = map['description']?? "";
+    imagePath = map['imagePath'];
   }
 }

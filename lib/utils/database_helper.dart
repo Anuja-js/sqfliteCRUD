@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/user.dart';
@@ -13,6 +14,7 @@ class DatabaseHelper {
   String colAge = 'age';
   String colPhone = 'phone';
   String colDescription = 'description';
+  String colPhoto = 'imagePath';
 
   DatabaseHelper._createInstance();
 
@@ -36,8 +38,9 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE $userTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, '
-            '$colQualification TEXT, $colAge INTEGER, $colPhone INTEGER, $colDescription TEXT)');
+        'CREATE TABLE $userTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, '
+            '$colName TEXT, $colQualification TEXT, $colAge INTEGER, '
+            '$colPhone INTEGER, $colDescription TEXT, $colPhoto TEXT)');
   }
 
   Future<List<Map<String, dynamic>>> getUserMapList() async {
@@ -84,5 +87,11 @@ class DatabaseHelper {
     }
 
     return userList;
+  }
+
+  Future<User> save(User user) async {
+    var dbClient = await database;
+    user.id = await dbClient.insert(userTable, user.toMap());
+    return user;
   }
 }
