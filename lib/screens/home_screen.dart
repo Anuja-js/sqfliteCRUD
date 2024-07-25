@@ -17,12 +17,53 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<User> userList = [];
+  List<User> filteredUserList = [];
   int count = 0;
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     updateListView();
     super.initState();
+  }
+
+  void updateListView() {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<User>> userListFuture = databaseHelper.getUserList();
+      userListFuture.then((userList) {
+        setState(() {
+          this.userList = userList;
+          this.filteredUserList = userList;
+          this.count = userList.length;
+        });
+      });
+    });
+  }
+
+  void filterSearchResults(String query) {
+    List<User> dummySearchList = [];
+    dummySearchList.addAll(userList);
+    if (query.isNotEmpty) {
+      List<User> dummyListData = [];
+      dummySearchList.forEach((item) {
+        if (item.name!.toLowerCase().contains(query.toLowerCase())) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        // filteredUserList.clear();
+        filteredUserList.addAll(dummyListData);
+        count = filteredUserList.length;
+      });
+      return;
+    } else {
+      setState(() {
+        filteredUserList.clear();
+        filteredUserList.addAll(userList);
+        count = filteredUserList.length;
+      });
+    }
   }
 
   @override
@@ -40,11 +81,30 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: getUsersListView(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: filterSearchResults,
+              decoration: InputDecoration(
+                labelText: "Search",
+                hintText: "Search by name",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                ),
+              ),
+            ),
+          ),
+          Expanded(child: getUsersListView()),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepOrangeAccent,
         onPressed: () {
-          navigateToDetail(User('', '', 0, 0, ''), 'Add User');
+          navigateToDetail(User('', '', " "as int, " "as int, ''), 'Add User');
         },
         tooltip: 'Add User',
         child: Icon(Icons.add),
@@ -65,30 +125,30 @@ class _HomePageState extends State<HomePage> {
               child: Icon(Icons.person),
             ),
             title: Text(
-              userList[position].name!,
+              filteredUserList[position].name!,
               style: TextStyle(color: Colors.black),
             ),
-            subtitle: Text(userList[position].description!),
+            subtitle: Text(filteredUserList[position].description!),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   icon: Icon(Icons.edit, color: Colors.grey),
                   onPressed: () {
-                    navigateToDetail(userList[position], 'Edit User');
+                    navigateToDetail(filteredUserList[position], 'Edit User');
                   },
                 ),
                 IconButton(
                   icon: Icon(Icons.delete, color: Colors.grey),
                   onPressed: () {
-                    _delete(context, userList[position]);
+                    _delete(context, filteredUserList[position]);
                   },
                 ),
               ],
             ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => UserDetails(userList[position]),
+                builder: (context) => UserDetails(filteredUserList[position]),
               ));
             },
           ),
@@ -114,19 +174,6 @@ class _HomePageState extends State<HomePage> {
   void _showSnackBar(BuildContext context, String message) {
     final snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  void updateListView() {
-    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-    dbFuture.then((database) {
-      Future<List<User>> userListFuture = databaseHelper.getUserList();
-      userListFuture.then((userList) {
-        setState(() {
-          this.userList = userList;
-          this.count = userList.length;
-        });
-      });
-    });
   }
 
   void navigateToDetail(User user, String name) async {
