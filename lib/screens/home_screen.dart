@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   List<User> userList = [];
   int count = 0;
   bool isPress = true;
+TextEditingController  textControl=TextEditingController();
   @override
   void initState() {
     updateListView();
@@ -58,7 +59,8 @@ class _HomePageState extends State<HomePage> {
                 "assets/images/background.jpeg",
                 fit: BoxFit.fill,
               )),
-      isPress?    getUsersListView():getUserGridView()
+
+     isPress?    getUsersListView():getUserGridView()
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -72,91 +74,102 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  ListView getUsersListView() {
-    return ListView.builder(
-      physics: const ScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      
-      itemCount: count,
-      itemBuilder: (BuildContext context, int position) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18,horizontal: 15),
-          child: Card(
-            color: Colors.transparent,
-            elevation: 2.0,
-            child: ListTile(
+   getUsersListView() {
+    return Column(
+      children: [
+        TextFormField(
+          controller: textControl,
+          onChanged: (value){
+            userList=userList.where((element) => Element.name.contains(textControl.text);
+            );
+          },
+        ),
+        ListView.builder(
+          physics: const ScrollPhysics(),
+          scrollDirection: Axis.vertical,
 
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              leading: CircleAvatar(
-                backgroundColor: Colors.black,
-                radius: 25,
-                child: userList[position].imagePath != null
-                    ? SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: Image.file(
-                              File(
-                                userList[position].imagePath!,
-                              ),
-                              fit: BoxFit.cover,
-                            )),
-                      )
-                    : const Icon(Icons.person),
-              ),
-              title: Text(
-                userList[position].name!,
-                style: const TextStyle(color: Colors.black),
-              ),
-              subtitle: Text(userList[position].qualification!),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.black54),
-                    onPressed: () {
-                      navigateToDetail(userList[position], 'Edit User');
-                    },
+          itemCount: count,
+          itemBuilder: (BuildContext context, int position) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 18,horizontal: 15),
+              child: Card(
+                color: Colors.transparent,
+                elevation: 2.0,
+                child: ListTile(
+
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    radius: 25,
+                    child: userList[position].imagePath != null
+                        ? SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(25),
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                child: Image.file(
+                                  File(
+                                    userList[position].imagePath!,
+                                  ),
+                                  fit: BoxFit.cover,
+                                )),
+                          )
+                        : const Icon(Icons.person),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.black54),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Logout?..."),
-                              content: Text(
-                                  "Are you sure? ${userList[position].name} is deleted?"),
-                              actions: [
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("Cancel")),
-                                TextButton(
-                                    onPressed: () {
-                                      _delete(context, userList[position]);
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text("Delete")),
-                              ],
-                            );
-                          });
-                    },
+                  title: Text(
+                    userList[position].name!,
+                    style: const TextStyle(color: Colors.black),
                   ),
-                ],
+                  subtitle: Text(userList[position].qualification!),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.black54),
+                        onPressed: () {
+                          navigateToDetail(userList[position], 'Edit User');
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.black54),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Logout?..."),
+                                  content: Text(
+                                      "Are you sure? ${userList[position].name} is deleted?"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("Cancel")),
+                                    TextButton(
+                                        onPressed: () {
+                                          _delete(context, userList[position]);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("Delete")),
+                                  ],
+                                );
+                              });
+                        },
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => UserDetails(userList[position])));
+                  },
+                ),
               ),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => UserDetails(userList[position])));
-              },
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ],
     );
   }
 
