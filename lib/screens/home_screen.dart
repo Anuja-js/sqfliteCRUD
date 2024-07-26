@@ -37,7 +37,8 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               isPress=!isPress;
             });
-          }, icon: Icon(Icons.grid_4x4_outlined)),
+          }, icon:isPress? const Icon(Icons.grid_4x4_outlined):const Icon((Icons.list_alt_outlined)
+          )),
           IconButton(
             onPressed: () {
               logout(context);
@@ -73,83 +74,86 @@ class _HomePageState extends State<HomePage> {
 
   ListView getUsersListView() {
     return ListView.builder(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       scrollDirection: Axis.vertical,
-
       
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
-        return Card(
-          color: Colors.transparent,
-          elevation: 2.0,
-          child: ListTile(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            leading: CircleAvatar(
-              backgroundColor: Colors.black,
-              radius: 25,
-              child: userList[position].imagePath != null
-                  ? SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Image.file(
-                            File(
-                              userList[position].imagePath!,
-                            ),
-                            fit: BoxFit.cover,
-                          )),
-                    )
-                  : const Icon(Icons.person),
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18,horizontal: 15),
+          child: Card(
+            color: Colors.transparent,
+            elevation: 2.0,
+            child: ListTile(
+
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              leading: CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 25,
+                child: userList[position].imagePath != null
+                    ? SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: Image.file(
+                              File(
+                                userList[position].imagePath!,
+                              ),
+                              fit: BoxFit.cover,
+                            )),
+                      )
+                    : const Icon(Icons.person),
+              ),
+              title: Text(
+                userList[position].name!,
+                style: const TextStyle(color: Colors.black),
+              ),
+              subtitle: Text(userList[position].qualification!),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.black54),
+                    onPressed: () {
+                      navigateToDetail(userList[position], 'Edit User');
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.black54),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Logout?..."),
+                              content: Text(
+                                  "Are you sure? ${userList[position].name} is deleted?"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Cancel")),
+                                TextButton(
+                                    onPressed: () {
+                                      _delete(context, userList[position]);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("Delete")),
+                              ],
+                            );
+                          });
+                    },
+                  ),
+                ],
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => UserDetails(userList[position])));
+              },
             ),
-            title: Text(
-              userList[position].name!,
-              style: const TextStyle(color: Colors.black),
-            ),
-            subtitle: Text(userList[position].qualification!),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.edit, color: Colors.grey),
-                  onPressed: () {
-                    navigateToDetail(userList[position], 'Edit User');
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.grey),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Logout?..."),
-                            content: Text(
-                                "Are you sure? ${userList[position].name} is deleted?"),
-                            actions: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("Cancel")),
-                              TextButton(
-                                  onPressed: () {
-                                    _delete(context, userList[position]);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text("Delete")),
-                            ],
-                          );
-                        });
-                  },
-                ),
-              ],
-            ),
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => UserDetails(userList[position])));
-            },
           ),
         );
       },
@@ -157,11 +161,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   GridView getUserGridView() {
-    return GridView.builder(padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-        physics: ScrollPhysics(),
+    return GridView.builder(padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+        physics: const ScrollPhysics(),
         scrollDirection: Axis.vertical,
         itemCount: count,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 10.0,
           crossAxisSpacing: 10.0,
@@ -173,7 +177,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => UserDetails(userList[position])));
           },
-            child: Card(shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            child: Card(shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               color: Colors.transparent,
               elevation: 2.0,
                 child: Padding(
@@ -191,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                           width: 80,
                           height: 80,
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
+                              borderRadius: BorderRadius.circular(39),
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               child: Image.file(
                                 File(
@@ -202,28 +206,28 @@ class _HomePageState extends State<HomePage> {
                         )
                             : const Icon(Icons.person),
                       ),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                       Text(
                         userList[position].name!,
                         style: const TextStyle(color: Colors.black,fontSize: 18),
                       ),
-                      SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                       Text(
                         userList[position].qualification!,
                         style: const TextStyle(color: Colors.black54,fontSize: 15),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                         IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.grey),
+                          icon: const Icon(Icons.edit, color: Colors.black54),
                           onPressed: () {
                             navigateToDetail(userList[position], 'Edit User');
                           },
                         ),
                         IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.grey),
+                          icon: const Icon(Icons.delete, color: Colors.black54),
                           onPressed: () {
                             showDialog(
                                 context: context,
