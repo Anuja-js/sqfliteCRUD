@@ -27,7 +27,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Image.asset("assets/images/splash.png",width: 60,height: 60,),),
+      body: Stack(
+    children:[
+   Positioned(
+       top: 0,
+       left: 0,
+       right: 0,
+       bottom: 0,
+       child: Image.asset("assets/images/background.jpeg",fit: BoxFit.fill,)),
+      Center(child: Column (
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+           Image.asset("assets/images/splash.png",width: 160,height: 160,),
+          SizedBox(height: 20,),
+          Text("Students Register",style: TextStyle(fontSize: 25),),
+        ],
+      )),
+
+        ]
+      ),
     );
   }
 

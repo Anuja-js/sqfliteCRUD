@@ -44,12 +44,12 @@ class User {
   }
 
   User.fromMapObject(Map<String, dynamic> map) {
-    id = map['id']?? "";
-    name = map['name']?? "";
-    qualification = map['qualification']?? "";
-    age = map['age']?? "";
-    phone = map['phone']?? "";
-    description = map['description']?? "";
+    id = map['id'];
+    name = map['name'];
+    qualification = map['qualification'];
+    age = map['age'];
+    phone = map['phone'];
+    description = map['description'];
     imagePath = map['imagePath'];
   }
 }

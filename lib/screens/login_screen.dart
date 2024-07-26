@@ -22,125 +22,149 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.deepOrangeAccent,
-        title: const Text("Log In"),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor:Colors.black,
+      //   title: const Text("Log In"),
+      // ),
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 45),
-        child: Form(
-          key: formkey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                style: const TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Courier',
-                ),
-                controller: _nameController,
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  labelText: 'Enter Your Name',
-                  labelStyle: TextStyle(
-                    color: Colors.deepOrangeAccent,
+        child: Stack(
+          children:[
+            Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Image.asset("assets/images/background.jpeg",fit: BoxFit.fill,)),
+
+            Positioned(
+              top: 100,
+              left: 10,
+              right: 10,
+              bottom: 10,
+
+              child: Form(
+              key: formkey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset("assets/images/splash.png",width: 50,height: 50,),
+                      SizedBox(width: 10,),
+                      Text("Log In")
+                    ],
                   ),
-                  fillColor: Colors.grey,
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2)),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2)),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 2),
+                  const SizedBox(
+                    height: 30,
                   ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please Enter Your Name";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                style: const TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Courier',
-                ),
-                controller: _passwordController,
-                obscureText: obscure,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
+                  TextFormField(
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Courier',
+                    ),
+                    controller: _nameController,
+                    keyboardType: TextInputType.name,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter Your Name',
+                      labelStyle: TextStyle(
+                        color:Colors.black,
+                      ),
+                      fillColor: Colors.grey,
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red, width: 2)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 2),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Your Name";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Courier',
+                    ),
+                    controller: _passwordController,
+                    obscureText: obscure,
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscure = !obscure;
+                            });
+                          },
+                          icon: obscure
+                              ?const Icon(Icons.visibility_outlined,
+                                  color: Colors.black,)
+                              :const Icon(
+                                  Icons.visibility_off_outlined,
+                                  color:Colors.black,
+                                )),
+                      labelText: "Enter Your Password",
+                      labelStyle:const TextStyle(color: Colors.black,),
+                      border: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey, width: 2)),
+                      errorBorder:const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 2),
+                      ),
+                      focusedBorder:const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 2),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Please Enter Your Password";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const Spacer(),
+                  Center(
+                    child: ElevatedButton(
                       onPressed: () {
-                        setState(() {
-                          obscure = !obscure;
-                        });
+                        if (formkey.currentState!.validate()) {
+                          checkLogIn(context);
+                        } else {
+                           if (kDebugMode) {
+                             print("Data Empty");
+                           }
+                        }
+                        // checkLogIn(context);
                       },
-                      icon: obscure
-                          ?const Icon(Icons.visibility_outlined,
-                              color: Colors.deepOrangeAccent)
-                          :const Icon(
-                              Icons.visibility_off_outlined,
-                              color: Colors.deepOrangeAccent,
-                            )),
-                  labelText: "Enter Your Password",
-                  labelStyle:const TextStyle(color: Colors.deepOrangeAccent),
-                  border: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2)),
-                  errorBorder:const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2),
-                  ),
-                  focusedBorder:const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 2),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please Enter Your Password";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              const Spacer(),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (formkey.currentState!.validate()) {
-                      checkLogIn(context);
-                    } else {
-                       if (kDebugMode) {
-                         print("Data Empty");
-                       }
-                    }
-                    // checkLogIn(context);
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.grey),
-                    padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(
-                          vertical: 15,
-                          horizontal: MediaQuery.of(context).size.width / 2.7),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.black),
+                        padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(
+                              vertical: 15,
+                              horizontal: MediaQuery.of(context).size.width / 2.5),
+                        ),
+                      ),
+                      child: const Text("LogIn"),
                     ),
                   ),
-                  child: const Text("LogIn"),
-                ),
+                  const SizedBox(height: 30,)
+                ],
               ),
-              const SizedBox(height: 30,)
-            ],
           ),
+            ),
+            ]
         ),
-      )),
+
+      ),
     );
   }
 
