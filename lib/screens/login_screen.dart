@@ -146,9 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         // checkLogIn(context);
                       },
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Colors.black),
-                        foregroundColor: WidgetStateProperty.all(Colors.white),
-                        padding: WidgetStateProperty.all(
+                        backgroundColor: MaterialStateProperty.all(Colors.black),
+                        foregroundColor: MaterialStateProperty.all(Colors.white),
+                        padding: MaterialStateProperty.all(
                           EdgeInsets.symmetric(
                               vertical: 15,
                               horizontal: MediaQuery.of(context).size.width / 2.5),

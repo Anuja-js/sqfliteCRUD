@@ -129,8 +129,8 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
             right: 10,
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.black),
-                foregroundColor: WidgetStateProperty.all(Colors.white),
+                backgroundColor: MaterialStateProperty.all(Colors.black),
+                foregroundColor: MaterialStateProperty.all(Colors.white),
 
               ),
               child: Padding(

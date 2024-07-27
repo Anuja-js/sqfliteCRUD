@@ -91,7 +91,9 @@ TextEditingController  textControl=TextEditingController();
                 fit: BoxFit.fill,
               )),
 
-     isPress?    getUsersListView():getUserGridView()
+
+       userList.length==0?Center(child: Text("NO STUDENTS AVAILABLE",style: TextStyle(color: Colors.black),)) :isPress?    getUsersListView():getUserGridView()
+
         ],
       ),
       floatingActionButton: FloatingActionButton(
