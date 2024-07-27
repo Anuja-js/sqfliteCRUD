@@ -49,10 +49,10 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appBarTitle),
+        title: Text(appBarTitle,style: const TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back,color: Colors.white),
           onPressed: () {
             moveToLastScreen();
           },
@@ -118,7 +118,7 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
                   buildTextFormField(ageController, 'Age', updateAge, keyboardType: TextInputType.number),
                   buildTextFormField(phoneController, 'Phone', updatePhone, keyboardType: TextInputType.number),
                   buildTextFormField(descriptionController, 'Description', updateDescription),
-                  SizedBox(height: 55,),
+                  const SizedBox(height: 55,),
                 ],
               ),
             ),
@@ -128,6 +128,11 @@ class UserDetailsEditState extends State<UserDetailsEdit> {
             left: 10,
             right: 10,
             child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.black),
+                foregroundColor: WidgetStateProperty.all(Colors.white),
+
+              ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                 child: Text(

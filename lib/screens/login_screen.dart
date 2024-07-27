@@ -146,14 +146,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         // checkLogIn(context);
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
-                        padding: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                        foregroundColor: WidgetStateProperty.all(Colors.white),
+                        padding: WidgetStateProperty.all(
                           EdgeInsets.symmetric(
                               vertical: 15,
                               horizontal: MediaQuery.of(context).size.width / 2.5),
                         ),
                       ),
-                      child: const Text("LogIn"),
+                      child: const Text("LogIn",style: TextStyle(color: Colors.white),),
                     ),
                   ),
                   const SizedBox(height: 30,)

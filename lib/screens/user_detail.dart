@@ -3,7 +3,6 @@
 import 'dart:io';
 
 import 'package:crud_sqflite_app/screens/home_screen.dart';
-import 'package:crud_sqflite_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_sqflite_app/models/user.dart';
 import 'package:crud_sqflite_app/screens/edit_user_details.dart';
@@ -18,7 +17,7 @@ class UserDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(user.name!),
+        title: Text(user.name!,style: const TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
       ),
       body: Stack(
@@ -44,7 +43,7 @@ class UserDetails extends StatelessWidget {
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Image.file(File(user.imagePath!,),fit: BoxFit.cover,)),
               )
-                  : const Icon(Icons.person),
+                  : const Icon(Icons.person,color: Colors.white),
 
             ),),
           Positioned(
@@ -109,7 +108,7 @@ class UserDetails extends StatelessWidget {
             child:
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               ElevatedButton(
 
                 onPressed: () {
@@ -120,18 +119,21 @@ class UserDetails extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
+                  foregroundColor: Colors.white
                 ),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                   child: Text('Edit'),
                 ),
               ),
+              const SizedBox(width: 10,),
               ElevatedButton(
                 onPressed: () {
                   _deleteUser(context, user);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
+                  foregroundColor: Colors.white
                 ),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
@@ -152,7 +154,7 @@ class UserDetails extends StatelessWidget {
     if (result != 0) {
       _showSnackBar(context, 'User Deleted Successfully');
 
-   Navigator.of(context).push(MaterialPageRoute(builder:  (context) => HomePage())
+   Navigator.of(context).push(MaterialPageRoute(builder:  (context) => const HomePage())
    );
     } else {
       _showSnackBar(context, 'Error Deleting User');
