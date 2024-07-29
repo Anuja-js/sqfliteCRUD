@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_types_as_parameter_names
+
 import 'dart:io';
 
 import 'package:crud_sqflite_app/screens/user_detail.dart';
@@ -54,6 +56,7 @@ TextEditingController  textControl=TextEditingController();
           if(value.isNotEmpty)
           {
             var userListFuture = databaseHelper.getUserList();
+            // ignore: non_constant_identifier_names
             userListFuture.then((List) {
               setState(() {
                 userList = List.where((element) => element.name!.toUpperCase().contains(textControl.text.toUpperCase())).toList();
@@ -92,7 +95,7 @@ TextEditingController  textControl=TextEditingController();
               )),
 
 
-       userList.length==0?Center(child: Text("NO STUDENTS AVAILABLE",style: TextStyle(color: Colors.black),)) :isPress?    getUsersListView():getUserGridView()
+       userList.isEmpty?const Center(child: Text("NO STUDENTS AVAILABLE",style: TextStyle(color: Colors.black),)) :isPress?    getUsersListView():getUserGridView()
 
         ],
       ),

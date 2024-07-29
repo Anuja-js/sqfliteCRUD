@@ -128,8 +128,32 @@ class UserDetails extends StatelessWidget {
               ),
               const SizedBox(width: 10,),
               ElevatedButton(
-                onPressed: () {
-                  _deleteUser(context, user);
+                onPressed: ()
+                  {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Delete...?"),
+                            content: Text(
+                                "Are you sure? ${user.name} will be deleted?"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Cancel")),
+                              TextButton(
+                                  onPressed: () {_deleteUser(context, user);
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text("Delete")),
+                            ],
+                          );
+                        });
+
+
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,

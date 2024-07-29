@@ -17,7 +17,7 @@ class User {
       this.description, [
         this.imagePath,
       ]);
-
+//named constructor
   User.withId(
       this.id,
       this.name,
@@ -44,6 +44,7 @@ class User {
   }
 
   User.fromMapObject(Map<String, dynamic> map) {
+    // map id key value assign to id
     id = map['id'];
     name = map['name'];
     qualification = map['qualification'];

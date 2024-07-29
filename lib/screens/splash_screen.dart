@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,8 +41,8 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
            Image.asset("assets/images/splash.png",width: 160,height: 160,),
-          SizedBox(height: 20,),
-          Text("Students Register",style: TextStyle(fontSize: 25),),
+          const SizedBox(height: 20,),
+          const Text("Students Register",style: TextStyle(fontSize: 25),),
         ],
       )),
 
@@ -62,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> checkUserLogedin() async {
     final sharedprfs = await SharedPreferences.getInstance();
-    final userLoggedIn = await sharedprfs.getBool(save_Key);
+    final userLoggedIn = sharedprfs.getBool(save_Key);
     if (userLoggedIn == null || userLoggedIn == false) {
       goToLogin();
     } else {

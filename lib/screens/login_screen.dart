@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:crud_sqflite_app/screens/home_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     children: [
                       Image.asset("assets/images/splash.png",width: 50,height: 50,),
-                      SizedBox(width: 10,),
-                      Text("Log In")
+                      const SizedBox(width: 10,),
+                      const Text("Log In")
                     ],
                   ),
                   const SizedBox(
@@ -146,9 +148,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         // checkLogIn(context);
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.black),
-                        foregroundColor: MaterialStateProperty.all(Colors.white),
-                        padding: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(Colors.black),
+                        foregroundColor: WidgetStateProperty.all(Colors.white),
+                        padding: WidgetStateProperty.all(
                           EdgeInsets.symmetric(
                               vertical: 15,
                               horizontal: MediaQuery.of(context).size.width / 2.5),
